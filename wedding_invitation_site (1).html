@@ -1,0 +1,60 @@
+// script.js
+
+// Slider Geser Manual (Swipe or Scroll)
+const slider = document.querySelector('.slider');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+if (slider) {
+  slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    slider.classList.add('active');
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+  });
+
+  slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    slider.classList.remove('active');
+  });
+
+  slider.addEventListener('mouseup', () => {
+    isDown = false;
+    slider.classList.remove('active');
+  });
+
+  slider.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 2;
+    slider.scrollLeft = scrollLeft - walk;
+  });
+}
+
+// Fungsi buka undangan
+function openInvitation() {
+  document.querySelector(".hero").style.display = "none";
+  document.body.style.overflowY = "auto";
+}
+
+// Handle RSVP
+function handleRSVP(e) {
+  e.preventDefault();
+  alert("Terima kasih sudah mengisi konfirmasi kehadiran! 😊");
+}
+
+// Ambil nama tamu dari URL ?to=NamaTamu
+function getGuestNameFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const guest = params.get("to");
+  if (guest) {
+    const guestNameElement = document.querySelector(".guest-name");
+    if (guestNameElement) {
+      guestNameElement.textContent = decodeURIComponent(guest.replace(/\+/g, ' '));
+    }
+  }
+}
+
+getGuestNameFromURL();
